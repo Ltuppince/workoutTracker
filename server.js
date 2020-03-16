@@ -45,8 +45,8 @@ app.get("/exercise", (req, res) => {
   
   
   app.post("/api/workouts", ({ body }, res) => {
-    db.Workout.create(body).then(data => {
-      res.json(data);
+    db.Workout.create(body).then(dbWorkout => {
+      res.json(dbWorkout);
     });
   });
   
@@ -56,9 +56,9 @@ app.get("/exercise", (req, res) => {
   });
   
   app.get("/api/workouts/range", (req, res) => {
-    db.Workout.find({})
-      .then(data => {
-        res.json(data);
+    db.Workout.find({"exercises.0":{"exists":true}}).sort({_id:-1}).limit(7)
+      .then(dbWorkout => {
+        res.json(dbWorkout);
       })
       .catch(err => {
         res.json(err);
