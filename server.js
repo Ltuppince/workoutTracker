@@ -16,7 +16,9 @@ app.use(express.json());
 
 app.use(express.static("./public"));
 
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://workout:password1@ds229068.mlab.com:29068/heroku_b4b2l5xt", { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useFindAndModify: false });
+
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname + "/public/index.html"));
@@ -45,8 +47,8 @@ app.get("/exercise", (req, res) => {
   
   
   app.post("/api/workouts", ({ body }, res) => {
-    db.Workout.create(body).then(dbWorkout => {
-      res.json(dbWorkout);
+    db.Workout.create(body).then(data => {
+      res.json(data);
     });
   });
   
@@ -56,9 +58,9 @@ app.get("/exercise", (req, res) => {
   });
   
   app.get("/api/workouts/range", (req, res) => {
-    db.Workout.find({"exercises.0":{"exists":true}}).sort({_id:-1}).limit(7)
-      .then(dbWorkout => {
-        res.json(dbWorkout);
+    db.Workout.find({})
+      .then(data => {
+        res.json(data);
       })
       .catch(err => {
         res.json(err);
